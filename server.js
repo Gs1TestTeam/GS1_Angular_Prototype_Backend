@@ -22,9 +22,38 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // "Migration Difference" Routes
-
 app.get("/differences", (req,res) => {
     data.getAllDiffRows().then((data)=>{
+        res.json(data);
+    })
+    .catch((err)=>{
+        res.status(500).end();
+    })
+});
+
+// source total count
+app.get("/source_count", (req,res) => {
+    data.getSourceDataCount().then((data)=>{
+        res.json(data);
+    })
+    .catch((err)=>{
+        res.status(500).end();
+    })
+});
+
+// target total count
+app.get("/target_count", (req,res) => {
+    data.getTargetDataCount().then((data)=>{
+        res.json(data);
+    })
+    .catch((err)=>{
+        res.status(500).end();
+    })
+});
+
+// difference total count
+app.get("/difference_count", (req,res) => {
+    data.getDiffDataCount().then((data)=>{
         res.json(data);
     })
     .catch((err)=>{
@@ -39,14 +68,14 @@ app.use((req, res) => {
 
 
 // connect source db
-dataSource.getSourceDataCount()
-.then((cnt) => {
-    console.log(cnt)
-})
-.catch((err)=>{
-    console.log("unable to start the server: " + err);
-    process.exit();
-});
+// dataSource.getSourceDataCount()
+// .then((cnt) => {
+//     console.log(cnt)
+// })
+// .catch((err)=>{
+//     console.log("unable to start the server: " + err);
+//     process.exit();
+// });
 
 // connect target db
 // dataTarget.getTargetDataCount()
