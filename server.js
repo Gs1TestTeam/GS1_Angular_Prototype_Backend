@@ -9,6 +9,12 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const dataService = require("./data-service.js");
 
+const dataSourceService = require("./data-service_source.js");
+const dataSource = dataSourceService();
+
+const dataTargetService = require("./data-service_target.js");
+const dataTarget = dataTargetService();
+
 const data = dataService(mongoDBConnectionString);
 const app = express();
 
@@ -27,17 +33,35 @@ app.get("/differences", (req,res) => {
 });
 
 // Catch-All 404 error
-
 app.use((req, res) => {
     res.status(404).end();
 });
 
-// Connect to the DB and start the server
+
+// connect source db
+dataSource.getSourceDataCount()
+.then((cnt) => {
+    console.log(cnt)
+})
+.catch((err)=>{
+    console.log("unable to start the server: " + err);
+    process.exit();
+});
+
+// connect target db
+// dataTarget.getTargetDataCount()
+// .then((cnt) => {
+//     console.log(cnt)
+// })
+// .catch((err)=>{
+//     console.log("unable to start the server: " + err);
+//     process.exit();
+// });
 
 data.connect()
-.then(data.getAllDiffRows)
+.then(data.getTargetDataCount)
 .then((rows)=>{
-    console.log(rows)
+    console.log("target: " + rows)
     app.listen(HTTP_PORT, ()=>{console.log("GS1 Canada Backend System listening on: " + HTTP_PORT)});
 })
 .catch((err)=>{
