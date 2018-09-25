@@ -32,7 +32,7 @@ module.exports = function(mongoDBConnectionString){
                 DiffRows.find()
                 .exec()
                 .then((rows) => {
-                    //console.log(rows);                     
+                    //console.log("diff: " + rows);                     
                     resolve(rows);
                 })
                 .catch((err)=>{
@@ -44,9 +44,10 @@ module.exports = function(mongoDBConnectionString){
         {
             return new Promise(function(resolve,reject)
             {
-                TargetRows.count({})
+                DiffRows.count({})
                 .exec()
                 .then((cnt) => {
+                    console.log("differ: " + cnt);                        
                     resolve(cnt);
                 })
                 .catch((err)=>{
@@ -61,6 +62,7 @@ module.exports = function(mongoDBConnectionString){
                 TargetRows.count({})
                 .exec()
                 .then((cnt) => {
+                    console.log("target: " + cnt);                          
                     resolve(cnt);
                 })
                 .catch((err)=>{

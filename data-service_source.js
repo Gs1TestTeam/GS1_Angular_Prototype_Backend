@@ -24,6 +24,7 @@ module.exports = function(){
                 conn.connect().then(function() {
                     var req = new sql.Request(conn);
                     req.query("select count(0) as source_count from import_product i, import_product_version v where i.pid = v.pid").then( function(row) {
+                        console.log("source: " + row.recordset[0].source_count);    
                         resolve(row.recordset[0].source_count);
                         conn.close();
                     })

@@ -12,9 +12,6 @@ const dataService = require("./data-service.js");
 const dataSourceService = require("./data-service_source.js");
 const dataSource = dataSourceService();
 
-const dataTargetService = require("./data-service_target.js");
-const dataTarget = dataTargetService();
-
 const data = dataService(mongoDBConnectionString);
 const app = express();
 
@@ -23,6 +20,7 @@ app.use(cors());
 
 // "Migration Difference" Routes
 app.get("/differences", (req,res) => {
+    console.log("test.differences");
     data.getAllDiffRows().then((data)=>{
         res.json(data);
     })
@@ -33,7 +31,8 @@ app.get("/differences", (req,res) => {
 
 // source total count
 app.get("/source_count", (req,res) => {
-    data.getSourceDataCount().then((data)=>{
+    console.log("test.source_count");    
+    dataSource.getSourceDataCount().then((data)=>{
         res.json(data);
     })
     .catch((err)=>{
@@ -43,6 +42,7 @@ app.get("/source_count", (req,res) => {
 
 // target total count
 app.get("/target_count", (req,res) => {
+    console.log("test.target_count");        
     data.getTargetDataCount().then((data)=>{
         res.json(data);
     })
@@ -53,6 +53,7 @@ app.get("/target_count", (req,res) => {
 
 // difference total count
 app.get("/difference_count", (req,res) => {
+    console.log("test.difference_count");         
     data.getDiffDataCount().then((data)=>{
         res.json(data);
     })
@@ -67,30 +68,8 @@ app.use((req, res) => {
 });
 
 
-// connect source db
-// dataSource.getSourceDataCount()
-// .then((cnt) => {
-//     console.log(cnt)
-// })
-// .catch((err)=>{
-//     console.log("unable to start the server: " + err);
-//     process.exit();
-// });
-
-// connect target db
-// dataTarget.getTargetDataCount()
-// .then((cnt) => {
-//     console.log(cnt)
-// })
-// .catch((err)=>{
-//     console.log("unable to start the server: " + err);
-//     process.exit();
-// });
-
 data.connect()
-.then(data.getTargetDataCount)
-.then((rows)=>{
-    console.log("target: " + rows)
+.then(()=>{
     app.listen(HTTP_PORT, ()=>{console.log("GS1 Canada Backend System listening on: " + HTTP_PORT)});
 })
 .catch((err)=>{
